@@ -1542,6 +1542,7 @@ function paramsStrSort(paramsStr) {
 var distinct_id = ""//kepler系统用户唯一标识
 var debug_mode = "no_debug"////no_debug:关闭Debug模式;debug_and_import:开启Debug模式并导入数据;debug_and_not_import:开始Debug模式不导入数据
 var project_id = ""
+var authApi=""
 
 var ZLZZ_SDK_Option_Data_Storage = {
   openId: "",//唯一值
@@ -1552,8 +1553,12 @@ var ZLZZ_SDK_Option_Data_Storage = {
 }
 
 var init = function (obj) {
+  
   debug_mode = obj.debug_mode
   project_id = obj.project_id
+  authApi=obj.authApi
+
+  
 
   let ZLZZ_SDK_Option_Dataobj = wx.getStorageSync('ZLZZ_SDK_Option_Data')
 
@@ -1564,7 +1569,8 @@ var init = function (obj) {
     ZLZZ_SDK_Option_Data_Storage.is_first_time = false
    // console.log("以前初始化过， 可能登陆过ZLZZ_SDK_Option_Data_Storage", ZLZZ_SDK_Option_Data_Storage);
     var postidentificationtimed = (new Date()).getTime()
-    Api.postFormid('/api/v1/identification/' + obj.project_id + "?time=" + postidentificationtimed,
+    console.log("项目地址",authApi+'/api/v1/identification/' + obj.project_id + '?time=' + postidentificationtimed);
+    Api.postFormid(obj.authApi+'/api/v1/identification/' + obj.project_id + '?time=' + postidentificationtimed,
       {
         "user_id": obj.user_id || "",
         "udid": ZLZZ_SDK_Option_Data_Storage.openId
@@ -1580,6 +1586,9 @@ var init = function (obj) {
         let jsonZLZZ_SDK_Option_Data_Storage = JSON.parse(JSON.stringify(ZLZZ_SDK_Option_Data_Storage))
        // console.log("最后一次确认ZLZZ_SDK_Option_Data_Storage", jsonZLZZ_SDK_Option_Data_Storage);
         wx.setStorageSync('ZLZZ_SDK_Option_Data', jsonZLZZ_SDK_Option_Data_Storage)
+      },
+       function (err) {
+       console.log(err);
       })
 
 
@@ -1599,7 +1608,7 @@ var init = function (obj) {
 
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         var postidentificationtime = (new Date()).getTime()
-        Api.postFormid('/api/v1/identification/' + obj.project_id + "?time=" + postidentificationtime,
+        Api.postFormid(obj.authApi+'/api/v1/identification/' + obj.project_id + '?time=' + postidentificationtime,
           {
             "user_id": obj.user_id || "",
             "udid": res.code
@@ -1612,7 +1621,10 @@ var init = function (obj) {
             ZLZZ_SDK_Option_Data_Storage.distinct_id = ress.data.data.distinct_id
             distinct_id = ress.data.data.distinct_id
             wx.setStorageSync('ZLZZ_SDK_Option_Data', ZLZZ_SDK_Option_Data_Storage)
-          })
+          },
+          function (err) {
+          console.log(err);
+         })
 
 
       }
@@ -1644,7 +1656,7 @@ var postTrack = function () {
   postTrackData.common.platform = "Mp"
 
   postTrackData.common.distinct_id = wx.getStorageSync('ZLZZ_SDK_Option_Data').distinct_id
-  Api.postFormid('/api/v1/track/' + project_id + "?time=" + ppostTracktime,
+  Api.postFormid(authApi+'/api/v1/track/' + project_id + "?time=" + ppostTracktime,
     postTrackData
     ,
     getSign({
@@ -1704,7 +1716,7 @@ var postProfile = function (obj) {
   postProfiledata.property = Object.assign(postProfiledata.property, obj.property)
   //console.log('保存画像请求postProfiledata', postProfiledata);
   var ppostTracktime = (new Date()).getTime()
-  Api.postFormid('/api/v1/user_profile/' + project_id + "?time=" + ppostTracktime,
+  Api.postFormid(authApi+'/api/v1/user_profile/' + project_id + "?time=" + ppostTracktime,
     postProfiledata
     ,
     getSign({
@@ -1718,7 +1730,10 @@ var postProfile = function (obj) {
         (new Date().getMinutes() > 9 ? new Date().getMinutes() : ("0" + new Date().getMinutes())) + ':' +
         (new Date().getSeconds() > 9 ? new Date().getSeconds() : ("0" + new Date().getSeconds())))
       //console.log('cg保存画像请求');
-    })
+    },
+    function (err) {
+    console.log(err);
+   })
 
 }
 //postProfile()
@@ -1759,7 +1774,7 @@ var login = function (obj) {
   ZLZZ_SDK_Option_Dataobjlogin.is_first_time = false
 
   var postidentificationtime = (new Date()).getTime()
-  Api.postFormid('/api/v1/identification/' + project_id + "?time=" + postidentificationtime,
+  Api.postFormid(authApi+'/api/v1/identification/' + project_id + "?time=" + postidentificationtime,
     {
       "user_id": obj.user_id,
       "udid": wx.getStorageSync('ZLZZ_SDK_Option_Data').openId
@@ -1778,7 +1793,10 @@ var login = function (obj) {
 
 
       // console.log('init函数distinct_id', distinct_id);
-    })
+    },
+    function (err) {
+    console.log(err);
+   })
 
 
   //}

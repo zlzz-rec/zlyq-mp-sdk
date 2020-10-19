@@ -1,8 +1,8 @@
-const authApi='http://47.93.23.110:8210';
+//const authApi='http://47.93.23.110:8210';
 
 function postFormid(url, data,header, successCallback, errorCallback) {
     wx.request({
-      url: authApi + url, //仅为示例，并非真实的接口地址
+      url:  url, //仅为示例，并非真实的接口地址
       data: data,
       method: 'POST',
       header: {
@@ -23,6 +23,6 @@ function postFormid(url, data,header, successCallback, errorCallback) {
 
   
   module.exports = {
-    authApi,
+   // authApi,
     postFormid
   }
