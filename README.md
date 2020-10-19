@@ -2,7 +2,7 @@
 
 ### 引入 SDK
 ###### 1.先获取微信小程序 SDK 源码 
-###### 2.将 zlyq-mp-sdk/wxSDK 文件放入小程序 utils文件夹内
+###### 2.将 zlyq-mp-sdk/wxSDK 文件放入小程序 utils文件夹内，小程序本地设置勾选不校验域名，es6转es5
 ###### 3.在 app.js 文件中通过 require() 引入 SDK 
 ### 
     var zlzzSDK = require('./utils/zlyq-mp-sdk/wxSDK.js')
