@@ -1,6 +1,6 @@
 # zlyq-mp-sdk
 
-### 引入 SDK
+### 1.引入 SDK
 ###### 1.先获取微信小程序 SDK 源码 
 ###### 2.将 zlyq-mp-sdk/wxSDK 文件放入小程序 utils文件夹内，小程序本地设置勾选不校验域名，es6转es5
 ###### 3.在 app.js 文件中通过 require() 引入 SDK 
@@ -8,30 +8,36 @@
     var zlzzSDK = require('./utils/zlyq-mp-sdk/wxSDK.js')
     
 
-### 配置初始化
+### 2.配置初始化
 ###### 引入 SDK 后，可通过 init() 进行 SDK 初始化参数配置： 
 ### 
-    zlzzSDK.default.init({    
-      project_id: 1,//项目id  
-      user_id: "xxxx",// 登录后必填,不登陆可以不填，填写默认登陆  
-      debug_mode: "no_debug",//no_debug:关闭Debug模式;debug_and_import:开启Debug模式并导入数据;debug_and_not_import:开始Debug模式不导入数据   
+    zlzzSDK.default.init({  
+      authApi:'xx',
+      //接口前缀 （*必填 [String]）
+      project_id: 1,
+      //项目id  （*必填 [Number]）
+      user_id: "xxxx",
+      // 登录必填,不登陆可不填，如果填写自动登陆  （[Number]）
+      debug_mode: "no_debug",
+      //（*必填 [String]）no_debug:关闭Debug模式;debug_and_import:开启Debug模式并导入数据;debug_and_not_import:开始Debug模式不导入数据   
     })
     
-### 微信小程序登陆
-###### 可通过 login() 登陆
+### 3.微信小程序登陆
+###### 登录成功时，需要调用 login() 方法传入登录 ID
 ### 
     zlzzSDK.login({    
-      user_id: "ox1d4ed07b25e65a74"// 登录必填   
+      user_id: "ox1d4ed07b25e65a74"
+      //（*必填 [String]）   
     })
 
-### 微信小程序退出登陆
+### 4.微信小程序退出登陆
 ###### 可通过 logout() 退出登陆，清空user_id
 ### 
     zlzzSDK.default.logout()
 
 
     
-### 微信小程序预置事件
+### 5.微信小程序预置事件
 ###### 系统已经将通用的事件定义为预置事件,自动采集，无需开发者操作
 ### 
     事件名称	  相应小程序生命周期函数	    触发时机说明
@@ -42,14 +48,15 @@
                                       暂时只能获取到用户触发分享，无法监听是否分享成功的反馈 
 
 
-### 微信小程序自定义事件
+### 6.微信小程序自定义事件
 ###### 可通过 customEvents() 事件记录
 ### 
     zlzzSDK.customEvents({    
-      event: "onclick"//事件名称   
+      event: "onclick"//事件名称  
+      //（*必填 [String]）
     })
 
-### 微信小程序用户画像
+### 7.微信小程序用户画像
 ###### 系统提供了客户端SDK和服务端SDK的更新用户画像方法，创建/更新用户画像的消息全部都会经过标准模块接口进行过滤识别才会最终入库。
 ###### 与埋点数据不同的是:用户画像数据入库之后是可修改的，且对于不同类型的属性可能有不同的操作方法，因此各端SDK都提供了不同的方法用来对用户画像数据进行增删改查。 
 可通过 postProfile()方法 <br />  
@@ -64,8 +71,11 @@
 ### 
     zlzzSDK.default.postProfile({    
       debug_mode:"no_debug",
-      type: "set_once",// 对用户画像的操作方法
-      property:{//用户画像的属性
+      //（*必填[String]）
+      type: "set_once",
+      // 对用户画像的操作方法 （*必填[String]）
+      property:{
+      //用户画像的属性 （*必填[Object]）
           userSex: '男',
           userLever: 'VIP3'
       }
