@@ -1,4 +1,6 @@
 import Md5 from "./md5"
+const debugList= ['no_debug', 'debug_and_import', 'debug_and_not_import']
+
 let ZLZZ_SDK_Openid = ""//用户唯一指
 var mpshow_time = null,
   query_share_depth = 0,
@@ -129,6 +131,45 @@ var customEvents = function (obj) {
   //console.log("appHide resobj", resobj);
 
 }
+//选择Debug模式
+var changeDebugList = function () {
+  // console.log('getQueryString',getQueryString("pages/index1/index1?name='zyw'","name"));
+   
+    var getidentificationtime = (new Date()).getTime()
+    console.log('appShow', getSign({
+      "time":getidentificationtime //getidentificationtime
+    }));
+        wx.showActionSheet({
+          itemList:['调试模式（不导入数据）：打开调试模式，校验数据，但不进行数据导入', '调试模式（导入数据）：打开调试模式，校验数据，并将数据导入到中量分析中', '关闭调试模式：关闭 App 进程后，将自动关闭调试模式'],
+          success (res) {
+            console.log(res.tapIndex)
+            debug_mode= debugList[res.tapIndex] //选择的选择Debug模式
+            //
+            wx.request({
+              url: authApi+'/api/v1/debug/1/' + "qIBhJuNp" + "?time=" + 
+              getidentificationtime, //仅为示例，并非真实的接口地址
+              method: 'PUT',
+              data: {
+                "udid": wx.getStorageSync('ZLZZ_SDK_Option_Data').openId
+              },
+              
+              header: {
+                'Z-Sign':   getSign({
+                   "time": getidentificationtime
+                  }),
+                'content-type': 'application/json'
+              },success: function(ress) {
+              //console.log(ress.data)
+              }
+              })
+          
+        
+          },
+          fail (res) {
+            //console.log(res.errMsg)
+          }
+        })
+  }
 
 zjzzObj.autoTrackCustom = {
   trackCustom: function (e, t, a) {
@@ -204,6 +245,10 @@ zjzzObj.autoTrackCustom = {
   appShow: function (e) {
     //小程序启动时触发或者从后台切换到前台时触发，包括首次启动
     countDown()//开启倒计时
+    if(false){
+      changeDebugList()
+      
+    }
     var getZLZZ_SDK_Option_DataappShow = wx.getStorageSync('ZLZZ_SDK_Option_Data') || []
 
     var oldPage = Page;
@@ -1559,7 +1604,6 @@ var init = function (obj) {
   authApi=obj.authApi
 
   
-
   let ZLZZ_SDK_Option_Dataobj = wx.getStorageSync('ZLZZ_SDK_Option_Data')
 
   if (ZLZZ_SDK_Option_Dataobj) {
@@ -1569,10 +1613,10 @@ var init = function (obj) {
     ZLZZ_SDK_Option_Data_Storage.is_first_time = false
    // console.log("以前初始化过， 可能登陆过ZLZZ_SDK_Option_Data_Storage", ZLZZ_SDK_Option_Data_Storage);
     var postidentificationtimed = (new Date()).getTime()
-    console.log("项目地址",authApi+'/api/v1/identification/' + obj.project_id + '?time=' + postidentificationtimed);
+   // console.log("项目地址",authApi+'/api/v1/identification/' + obj.project_id + '?time=' + postidentificationtimed);
     Api.postFormid(obj.authApi+'/api/v1/identification/' + obj.project_id + '?time=' + postidentificationtimed,
       {
-        "user_id": obj.user_id || "",
+       // "user_id": obj.user_id || "",
         "udid": ZLZZ_SDK_Option_Data_Storage.openId
       }
       ,
@@ -1588,7 +1632,7 @@ var init = function (obj) {
         wx.setStorageSync('ZLZZ_SDK_Option_Data', jsonZLZZ_SDK_Option_Data_Storage)
       },
        function (err) {
-       console.log(err);
+      // console.log(err);
       })
 
 
@@ -1603,14 +1647,14 @@ var init = function (obj) {
           new Date().getHours() + ':' +
           (new Date().getMinutes() > 9 ? new Date().getMinutes() : ("0" + new Date().getMinutes())) + ':' +
           (new Date().getSeconds() > 9 ? new Date().getSeconds() : ("0" + new Date().getSeconds()))
-        ZLZZ_SDK_Option_Data_Storage.user_id = obj.user_id || ""
+     //   ZLZZ_SDK_Option_Data_Storage.user_id = obj.user_id || ""
 
 
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         var postidentificationtime = (new Date()).getTime()
         Api.postFormid(obj.authApi+'/api/v1/identification/' + obj.project_id + '?time=' + postidentificationtime,
           {
-            "user_id": obj.user_id || "",
+           // "user_id": obj.user_id || "",
             "udid": res.code
           }
           ,
@@ -1623,7 +1667,7 @@ var init = function (obj) {
             wx.setStorageSync('ZLZZ_SDK_Option_Data', ZLZZ_SDK_Option_Data_Storage)
           },
           function (err) {
-          console.log(err);
+         // console.log(err);
          })
 
 
