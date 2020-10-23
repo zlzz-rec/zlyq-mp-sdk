@@ -16,8 +16,6 @@
       //接口前缀 （*必填 [String]）
       project_id: 1,
       //项目id  （*必填 [Number]）
-      user_id: "xxxx",
-      // 登录必填,不登陆可不填，如果填写自动登陆  （[String]）
       debug_mode: "no_debug",
       //（*必填 [String]）no_debug:关闭Debug模式;debug_and_import:开启Debug模式并导入数据;debug_and_not_import:开始Debug模式不导入数据   
     })
